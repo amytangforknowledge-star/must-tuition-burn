@@ -4,8 +4,6 @@
 
 > **非官方项目。** 本工具不代表澳门科技大学的实际收费规则、学费构成或学校观点。金额为使用者输入后的数学模拟，不是账单；设计及功能如有相似，**如有雷同，纯属巧合**。该表述不免除尊重其他作品知识产权的义务。
 
-![网站桌面预览（示例金额并非官方学费）](assets/preview.png)
-
 ## 功能
 
 - 按澳门时间（UTC+8）显示**距离下课/下一节课倒计时**和**实时累计等效学费**
@@ -96,10 +94,8 @@ must-tuition-burn/
 │   ├── app.js
 │   ├── style.css
 │   ├── favicon.svg
-│   └── preview.png
 ├── README.md
-├── LICENSE
-└── .nojekyll
+└── LICENSE
 ```
 
 本地打开 `index.html` 即可，或运行 `python3 -m http.server 8000` 后浏览 `http://localhost:8000/`。无需 Node、API Key 或后台服务。
