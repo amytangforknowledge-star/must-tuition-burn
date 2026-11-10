@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071a1a">
+  <meta name="description" content="MUST Tuition Burn — 澳科大学费燃烧计时器。自己设置本科、硕士、博士学年学费、各节课时长与课表，自动扣除预置公众假期，实时显示课堂学费等效消耗。非官方趣味项目。">
+  <meta property="og:title" content="MUST Tuition Burn｜澳科大学费燃烧计时器">
+  <meta property="og:description" content="2小时50分钟？不一定！课时由你定，学费由你填，看看课堂的每一秒值多少钱。免费开源·纯本地计算。">
+  <meta property="og:type" content="website">
+  
+  <link rel="stylesheet" href="./assets/style.css">
+  <title>MUST Tuition Burn｜澳科大学费燃烧计时器 · 2026/27</title>
+  
+</head>
+<body>
+<div class="page">
+  <header class="header">
+    <a class="brand" href="#top" aria-label="返回顶部">
+      <span class="brandmark" aria-hidden="true">M<span>•</span></span>
+      <span class="brandwords"><strong>MUST TUITION BURN</strong><small>MACAU UNIVERSITY OF SCIENCE AND TECHNOLOGY · 2026/27</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="unofficial">非官方 · 趣味估算</span>
+      <button id="demoBtn" class="btn btn-outline" type="button">▶ 20× 演示</button>
+      <button id="shareBtn" class="btn btn-lime" type="button">分享网站 ↗</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="intro">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> LIVE TUITION COUNTER <span class="short-line"></span> 2026—2027</div>
+        <h1>这节课<span class="h1period">，</span><br><em>烧掉了多少钱<span class="question">?</span></em></h1>
+        <p class="subtitle">在澳门科技大学上课，一秒钟折算多少学费？<br class="desktop">本科、硕士、博士都能自定义。课时不一定是 2 小时 50 分钟。</p>
+      </div>
+      <div class="timezone"><span class="live-pill"><i id="statusDot"></i><span id="statusText">等待设置</span></span><div class="clock-zone">MACAU TIME <strong id="macauClock">--:--:--</strong></div></div>
+    </section>
+
+    <section class="counters" aria-label="实时计时与费用">
+      <article class="timer-box">
+        <div class="box-kicker"><span>01 / THE TIME</span><span id="timeState">COUNTDOWN</span></div>
+        <div class="box-label" id="countLabel">距离下一节课</div>
+        <div class="timer-digit" id="countdown" aria-live="off">00:00:00</div>
+        <div class="box-description" id="countHint">设定课表后开始计算</div>
+        <div class="progress-line"><div id="classProgress"></div></div>
+        <div class="box-bottom"><span>学年累计上课 <b id="elapsedClass">0 小时 00 分</b></span><span id="classDuration">单节时长由你决定</span></div>
+      </article>
+      <article class="burn-box paused" id="burnCard">
+        <div class="box-kicker"><span>02 / THE MONEY</span><span class="burnbadge" id="costState">PAUSED</span></div>
+        <div class="money-label">已燃烧 · 学年累计等效金额</div>
+        <div class="money-wrap"><span class="currency">MOP</span><span class="money" id="costNumber">0.00</span><span class="money-spark" aria-hidden="true">✳</span></div>
+        <div class="burn-sub"><span class="indicator" id="moneyIndicator"></span><span id="burnText">填入本学年学费后开始折算</span></div>
+        <div class="box-bottom"><span>预算 <b id="budgetLabel">MOP —</b></span><span>未折算 <b id="remainingLabel">MOP —</b></span></div>
+      </article>
+    </section>
+    <div class="demo-ribbon" id="demoBanner" role="status">● 20× 虚拟课堂演示中。时间与金额为模拟画面，不代表此刻的真实课程消耗。</div>
+    <section class="metrics" aria-label="计算摘要">
+      <div class="metric"><span>当前学期每秒折算</span><strong id="secondRate">MOP —</strong><small>仅在排定上课时累计</small></div>
+      <div class="metric"><span>每分钟折算</span><strong id="minuteRate">MOP —</strong><small>按有效授课时长计算</small></div>
+      <div class="metric"><span>全年有效课时</span><strong id="totalHours">—</strong><small>各节实际时长相加</small></div>
+      <div class="metric"><span>学年有效课程</span><strong id="lessonTotal">—</strong><small id="completedLessons">0 节已完成</small></div>
+    </section>
+    <section class="year-progress"><div class="year-header"><strong>2026 / 27 学年 · 折算进度</strong><b id="progressPct">0.0%</b></div><div class="year-track"><span id="yearProgress"></span></div><p id="nextInfo">设定之后将显示下一节有效课程</p></section>
+
+    <section class="section-heading" id="settings"><div><span class="eyebrow">PERSONALIZE YOUR COUNTER</span><h2>设置你的<span>烧钱参数</span></h2><p>没有统一学费，也没有统一课时。每个人的实际数字都需要自己输入。</p></div><span class="section-index">01 — 03</span></section>
+    <div class="configuration">
+      <section class="panel money-settings">
+        <div class="panel-title"><span class="bubble">01</span><h3>你的学费</h3></div>
+        <div class="field"><label for="degree">就读类别（只用于显示标签）</label><select id="degree"><option value="undergrad">本科 Bachelor</option><option value="master">硕士 Master</option><option value="phd">博士 PhD</option><option value="other">其他 / 自定义</option></select></div>
+        <div class="field"><label for="annualFee">本学年拟折算的学费总额 <span class="asterisk">*</span></label><div class="price-entry"><span>MOP</span><input type="number" id="annualFee" min="0" max="100000000" step="0.01" inputmode="decimal" placeholder="请填本人实际金额"></div><p class="help">本站不预填学校学费：请填<strong>本学年</strong>的合理金额，不要误把完整学制或全额贷款直接当作单年收费。</p></div>
+        <div class="field"><label for="firstShare">第一学期分配比例</label><div class="inline-field"><input id="firstShare" type="number" min="0" max="100" step="1" value="50"><span>%</span></div><p class="help" id="splitHint">第一学期与第二学期默认各占 50%，可自行调整。</p></div>
+        <div class="notice highlight"><b>金额由使用者自行决定</b><p>本科／硕士／博士收费不相同，专业、入学年份、奖助学金及缴费方式也可能不同。网站不验证金额、不提供收费标准或财务建议，请谨慎输入与解读。</p></div>
+      </section>
+      <section class="panel schedule-settings">
+        <div class="panel-title"><span class="bubble">02</span><h3>你的周课表</h3></div>
+        <div class="sem-tabs" role="tablist"><button id="autumnTab" type="button" class="selected" role="tab" aria-selected="true">第一学期</button><button id="springTab" type="button" role="tab" aria-selected="false">第二学期</button></div>
+        <div class="term-dates"><div class="field"><label for="termStart">本学期开始授课</label><input id="termStart" type="date"></div><div class="field"><label for="termEnd">本学期结束授课</label><input id="termEnd" type="date"></div></div>
+        <p class="help calendar-tip">默认按澳科大 2026/27 <strong>本科及先修班（不含 MBBS）</strong>日程表初始化。硕博及特殊专业须以所属学院和实际选课课表修改。</p>
+        <div class="weekly-row"><div class="field"><label for="weeklyCount">每周有几节课？</label><div class="inline-field"><input id="weeklyCount" type="number" min="0" max="20" step="1"><span>节 / 周</span></div></div><button id="copyTermBtn" class="btn btn-outline" type="button">复制至另一学期 ↗</button></div>
+        <div class="table-hint"><span>课程名称</span><span>星期</span><span>开始</span><span>时长(分钟)</span><span>结束</span></div>
+        <div class="lesson-rows" id="classRows"></div>
+        <p class="help">每节课可独立设置 15–600 分钟，例如 90、120、170、180 分钟。允许同一天多节课，但不能重叠或跨越午夜。</p>
+      </section>
+    </div>
+
+    <section class="panel advanced">
+      <div class="panel-title"><span class="bubble">03</span><h3>假期与特殊日期</h3></div>
+      <div class="advanced-grid"><div>
+        <label class="switch-row"><input type="checkbox" id="officialHolidays" checked><span><b>排除预置公众假期与明确休课日</b><small>2026 学校公假表 + 2027 政府公众假期 + 学校农历新年休课</small></span></label>
+        <label class="switch-row"><input type="checkbox" id="compensatoryHolidays"><span><b>额外排除政府公务员补假</b><small>默认不启用：政府补假不必然等于学校停课</small></span></label>
+        <p class="help">系统会自动排除非授课日期（复习期、期末考试期本来就不在授课范围）。学校运动会和个别学院活动，不会被默认当作全校停课。</p>
+      </div><div>
+        <label for="extraDates">自定义整日停课或补充排除日期</label>
+        <textarea id="extraDates" rows="5" spellcheck="false" placeholder="2026-11-16 院系停课&#10;2027-03-15~2027-03-17 个人休假"></textarea>
+        <p class="help">一行一个：<code>YYYY-MM-DD</code> 或 <code>YYYY-MM-DD~YYYY-MM-DD</code>，可添加说明。此项仅排除整日，不自动新增补课。</p>
+      </div></div>
+      <details class="holiday-details"><summary>查看预置假期清单、假期处理原则与官方来源 <span>＋</span></summary><div class="holiday-contents">
+        <div class="chips"><span>2026/09/26 中秋节翌日</span><span>2026/10/01–02 国庆节</span><span>2026/11/02 追思节</span><span>2026/12/08 圣母无原罪瞻礼</span><span>2027/02/01–14 农历新年休课</span><span>2027/03/26 耶稣受难日</span><span>2027/03/27 复活节前日</span><span>2027/04/05 清明节</span><span>2027/05/01 劳动节</span></div>
+        <p>2026 年 9 月 28 日、10 月 19 日及 2027 年 2 月 9–10 日、3 月 29 日、5 月 3 日等政府补假默认不作为大学停课日；若学校或课程确认停课，可启用额外排除，或输入个人停课日。与春节休课重合的日期不会重复扣除。</p>
+        <div class="source-links"><a href="https://stud.must.edu.mo/file/id-16156.html?locale=zh_CN" target="_blank" rel="noopener">澳科大本科校历 ↗</a><a href="https://sgs.must.edu.mo/file/academic.calendar.html" target="_blank" rel="noopener">澳科大研究生校历 ↗</a><a href="https://www.gov.mo/zh-hans/public-holidays/year-2027/" target="_blank" rel="noopener">澳门 2027 公众假期 ↗</a></div>
+      </div></details>
+      <div class="save-row"><span id="saveStatus">设置仅保存在当前浏览器 · 不上传服务器</span><div><button id="resetBtn" type="button" class="btn btn-outline">重置示例</button><button id="calculateBtn" type="button" class="btn btn-outline">预览计算</button><button id="saveBtn" type="button" class="btn btn-lime">✓ 保存并开始</button></div></div>
+    </section>
+
+    <section class="results"><div class="result-card"><div class="result-heading">YOUR SCHEDULE <span>有效课程概览</span></div><div id="scheduleSummary" class="result-list"></div></div><div class="result-card"><div class="result-heading">THE METHOD <span>计算方法</span></div><div class="formula">本学期分配学费 <span>÷</span> 本学期有效授课总秒数</div><div class="result-list"><div><span>第一学期</span><b id="autumnStats">—</b></div><div><span>第二学期</span><b id="springStats">—</b></div><div><span>正在查看</span><b id="degreeLabel">本科 · 2026/27</b></div></div><p class="math-note">各学期单独计算费率，再累计已发生的课堂秒数。不同长度的课按实际秒数加权；金额不会因网页打开而额外消耗或扣款。</p></div></section>
+
+    <section class="disclaimer" id="disclaimer"><span class="warn-symbol">!</span><div><h2>使用前请阅读 · IMPORTANT NOTICE</h2><p><b>非官方独立趣味作品。</b> 本站与澳门科技大学无隶属、认证、授权或合作关系。设计与功能如与其他作品存在相似之处，<b>如有雷同，纯属巧合</b>；该声明不免除对他人权利的尊重。</p><p>所有学费金额、授课时长、分配比例均由使用者自行设置。计算结果只是将所填金额按课表进行数学折算，<b>不是学校真实收费明细、实际教学成本、退款依据或财务建议</b>。请自行核对收费通知、学校假期、个人课表，并谨慎使用、转发与解释数值。MBBS、研究生和特殊教学安排可能不同。</p><p>本项目不收费、无服务器与付费 API；设置默认保存在本机浏览器。分享「个人配置链接」会公开你输入的学费与课表，请勿填写或分享敏感信息。</p></div></section>
+  </main>
+  <footer><span>MUST TUITION BURN · 2026 / 2027</span><span>Independent · Open source · Educational parody</span><div><a href="https://stud.must.edu.mo/file/id-16156.html?locale=zh_CN" target="_blank" rel="noopener">校历来源</a><a href="https://sgs.must.edu.mo/file/academic.calendar.html" target="_blank" rel="noopener">研究生校历</a><a href="#disclaimer">使用声明</a></div></footer>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<dialog id="shareDialog" class="share-dialog"><div class="share-title"><b>分享 MUST Tuition Burn</b><button id="closeShare" type="button" aria-label="关闭分享窗口">×</button></div><p>推荐分享网站本身，让朋友填写他们自己的参数。</p><button id="copySiteLink" type="button" class="share-choice">↗ 复制公开网站链接 <small>不包含你的学费与课程数据</small></button><button id="copyConfigLink" type="button" class="share-choice">⚑ 复制我的配置链接 <small>含填写的学费、课表及日期；接收者可看到</small></button><p class="share-privacy">注意：个人配置会编码在网址中。请不要公开敏感课程名称、个人信息或不愿透露的费用。</p></dialog>
+<script src="./assets/app.js"></script>
+</body>
+</html>
